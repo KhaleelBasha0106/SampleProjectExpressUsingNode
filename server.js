@@ -11,7 +11,7 @@ const db = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "root",
-  database: "spring_boot",
+  database: "busesdata",
 });
 
 // checking the database connection
@@ -23,6 +23,14 @@ db.connect((err) => {
   console.log("Connected to MySQL database!");
 });
 
+app.get('/buses',(req,res)=>{
+  const sql = 'SELECT * FROM AKBUSES';
+  db.query(sql,(error,data)=>{
+    if(error)
+    return res.status(400).send(error)
+     return res.send(data);
+  })
+})
 //making api for data
 app.get("/person", (req, res) => {
   const sql = "SELECT * FROM PERSON";
@@ -32,6 +40,7 @@ app.get("/person", (req, res) => {
   });
 });
 
+// getting the data by id
 app.get("/person/:id", (req, res) => {
   const personId = req.params.id;
 
@@ -54,6 +63,8 @@ app.get("/person/:id", (req, res) => {
   });
 });
 
+
+// inserting the data 
 app.post("/person", (req, res) => {
   // Extract data from the request body
   const { name, email, job } = req.body;
@@ -76,6 +87,8 @@ app.post("/person", (req, res) => {
   });
 });
 
+
+// updating the data
 app.put("/person/:id", (req, res) => {
   // Extract data from the request body
   const { name, email, job } = req.body;
@@ -102,6 +115,8 @@ app.put("/person/:id", (req, res) => {
   });
 });
 
+
+// deleting the data
 app.delete("/person/:id", (req, res) => {
   const personId = req.params.id; // Extract person ID from URL parameter
 
